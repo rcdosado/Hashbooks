@@ -8,6 +8,6 @@ Hashbooks
 
 Requirements
 ------------
- -Python 2.7
- -Python MySQL interface (MySQLdb)
+ - Python 2.7
+ - Python MySQL interface (MySQLdb)
  
