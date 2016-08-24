@@ -179,11 +179,8 @@ createBookTable(c,dbname,booktable)
 
 print '[+] creating publishers table'
 createPublisherTable(c,dbname,pubtable)
-
-					
-					
+		
 if len(sys.argv) == 2:
-	
 	dir = os.listdir(sys.argv[1])
 	for file in dir:
 		fn = os.path.normpath(os.path.join(sys.argv[1],file))
@@ -195,21 +192,16 @@ if len(sys.argv) == 2:
 				dirChecksum = sumlist(files)		
 				fol = fn.split("\\")[-1]
 				insertIntoPublisher(c,dbname,pubtable,fol,dirChecksum)		
-				
-				#will take very long.........
 				bookdictionary=checksumfiles(files)				
-				#get the pubID like this -->SELECT pubId FROM publishers p where name='Game'; <--Game is fn
 				query="""SELECT pubId FROM %s p where name='%s'""" % (pubtable,fol.replace("'","\\'"))
 				c.execute(query)
 				gotPubId=c.fetchone()
 				if gotPubId==None:
 					print '[-] No results from the query!'
 					continue
-					
 				for k,v in bookdictionary.items():
 					print "[+] Inserting %s,%s into table %s" % (k,v,booktable)					
 					insertIntoBooks(c,dbname,booktable,k,v,gotPubId[0])
-				
 			else:
 				print "[-] No files inside %s" % (sys.argv[1])
 				
@@ -220,15 +212,11 @@ else:
 		if os.path.isdir(fn):
 			print '[+] Trying to extract folder ' + fn
 			files = Walk(sys.argv[1], 1, '*.'+sys.argv[3]+';')
-						#query the id of fn
 			if files:								
 				dirChecksum = sumlist(files)		
 				fol = fn.split("\\")[-1]
 				insertIntoPublisher(c,dbname,pubtable,fol,dirChecksum)		
-				
-				#will take very long.........
 				bookdictionary=checksumfiles(files)				
-				#get the pubID like this -->SELECT pubId FROM publishers p where name='Game'; <--Game is fn
 				query="""SELECT pubId FROM %s p where name='%s'""" % (pubtable,fol.replace("'","\\'"))
 				c.execute(query)
 				gotPubId=c.fetchone()
@@ -239,10 +227,9 @@ else:
 				for k,v in bookdictionary.items():
 					print "[+] Inserting %s,%s into table %s" % (k,v,booktable)					
 					insertIntoBooks(c,dbname,booktable,k,v,gotPubId[0])
-				
 			else:
 				print "[-] No files inside %s" % (sys.argv[1])
 
 finish = now()
 elapsed_time = finish - start	
-print '[+] Elapsed time of the whole shebang is '+str(elapsed_time)+' seconds'
+print '[+] Elapsed time is '+str(elapsed_time)+' seconds'
